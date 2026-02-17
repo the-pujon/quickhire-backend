@@ -50,7 +50,7 @@ src/
 │   └── utils/          # Common utility functions
 ├── templates/          # Email templates
 ├── app.ts             # Express app configuration
-└── server.ts          # Server entry point
+└── server.ts          # Server start here
 ```
 
 ## ⚙️ Configuration
