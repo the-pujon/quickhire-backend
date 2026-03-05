@@ -1,14 +1,41 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 
 import cors from "cors";
+import mongoose from "mongoose";
 import router from "./app/routes";
 import globalErrorHandler from "./app/middlewares/globalErrorhandler";
 import notFound from "./app/middlewares/notFound";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import rateLimit from "express-rate-limit";
+import config from "./app/config";
+
+// ---------------------------------------------------------------------------
+// Serverless-safe MongoDB connection (cached across warm Vercel invocations)
+// ---------------------------------------------------------------------------
+type MongooseCache = {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+};
+declare global {
+  var mongooseCache: MongooseCache | undefined;
+}
+
+const cached: MongooseCache =
+  global.mongooseCache ??
+  (global.mongooseCache = { conn: null, promise: null });
+
+async function connectDB(): Promise<void> {
+  if (cached.conn) return;
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(config.database_url as string, {
+      bufferCommands: false,
+    });
+  }
+  cached.conn = await cached.promise;
+}
 
 const app: Application = express();
 
@@ -57,6 +84,17 @@ const limiter = rateLimit({
 
 // Apply the rate limiting middleware to all requests.
 app.use(limiter);
+
+// Ensure MongoDB is connected before handling any request (critical for serverless)
+app.use(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 // application routes
 app.use("/api/v1", router);
 
