@@ -7,6 +7,10 @@ node_modules
 .env.test
 .env.save
 coverage
+dist
+build
+.DS_Store
+*.log
 
 
 
