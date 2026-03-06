@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ApplicationController } from "./application.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { ApplicationValidation } from "./application.validation";
+import { auth } from "../../middlewares/auth";
 
 const router = Router();
 
@@ -13,9 +14,13 @@ router.post(
 );
 
 // Get all applications (admin)
-router.get("/", ApplicationController.getAllApplications);
+router.get("/", auth("admin"), ApplicationController.getAllApplications);
 
 // Get applications for a specific job (admin)
-router.get("/job/:jobId", ApplicationController.getApplicationsByJobId);
+router.get(
+  "/job/:jobId",
+  auth("admin"),
+  ApplicationController.getApplicationsByJobId,
+);
 
 export const ApplicationRoutes = router;
