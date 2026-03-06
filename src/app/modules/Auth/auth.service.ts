@@ -512,7 +512,7 @@ const refreshTokenService = async (res: any, token?: any) => {
       "You are not authorized. Login first",
     );
   }
-  const prefix = config.redis_cache_key_prefix;
+  const prefix = config.redis_cache_key_prefix || "auth";
 
   try {
     console.log("here2");
@@ -549,7 +549,6 @@ const refreshTokenService = async (res: any, token?: any) => {
     const accessToken = createToken(jwtPayload);
     const newRefreshToken = createToken(jwtPayload, { isRefresh: true });
 
-    const prefix = config.redis_cache_key_prefix || "auth";
     await Promise.all([
       cacheData(
         `${prefix}:user:${user.email}:accessToken`,
