@@ -21,7 +21,9 @@ export const auth = (
   )[]
 ) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.accessToken;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    // console.log("req.header", req.header);
 
     // console.log("here is the token", token)
 

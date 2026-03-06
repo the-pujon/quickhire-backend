@@ -504,9 +504,7 @@ const getUsers = async (filters: any) => {
 };
 
 const refreshTokenService = async (res: any, token?: any) => {
-  console.log(!token);
   if (!token) {
-    console.log("here");
     throw new AppError(
       httpStatus.UNAUTHORIZED,
       "You are not authorized. Login first",
@@ -515,26 +513,22 @@ const refreshTokenService = async (res: any, token?: any) => {
   const prefix = config.redis_cache_key_prefix || "auth";
 
   try {
-    console.log("here2");
     const decoded = jwt.verify(token, config.jwt_refresh_secret as string);
 
     const { email } = decoded as JwtPayload;
-    console.log("here3");
     const cachedToken = await getCachedData(
       `${config.redis_cache_key_prefix}:user:${email}:refreshToken`,
     );
-    console.log("cachedToken", cachedToken, token);
-    console.log(cachedToken === token);
 
     if (cachedToken !== token) {
-      console.log("entered here");
+      // console.log("entered here");
       removeTokens(res, prefix as string, email);
       throw new AppError(httpStatus.UNAUTHORIZED, "Token is not valid");
     }
 
     const user = await User.isUserExistsByEmail(email);
-    console.log("user comer here", user);
-    console.log(!user);
+    // console.log("user comer here", user);
+    // console.log(!user);
 
     if (!user) {
       removeTokens(res, prefix as string, email);
@@ -573,7 +567,7 @@ const refreshTokenService = async (res: any, token?: any) => {
         "Your session has expired. Please login again.",
       );
     } else if (error instanceof JsonWebTokenError) {
-      console.log(error);
+      console.error(error);
       throw new AppError(
         httpStatus.UNAUTHORIZED,
         "Invalid token. Please login again.",
