@@ -39,9 +39,9 @@ describe("ApplicationService", () => {
     jest.clearAllMocks();
   });
 
-  // ──────────────────────────────────────────────────────────
+  //
   // createApplication
-  // ──────────────────────────────────────────────────────────
+  //
   describe("createApplication", () => {
     it("should create an application successfully", async () => {
       (Job.findById as jest.Mock).mockResolvedValue(mockJobData);
@@ -123,9 +123,9 @@ describe("ApplicationService", () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────
+  //
   // getApplicationsByJobId
-  // ──────────────────────────────────────────────────────────
+  //
   describe("getApplicationsByJobId", () => {
     const buildFindQuery = (resolveValue: unknown) => ({
       sort: jest.fn().mockReturnThis(),
@@ -183,9 +183,9 @@ describe("ApplicationService", () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────
+  //
   // getAllApplications
-  // ──────────────────────────────────────────────────────────
+  //
   describe("getAllApplications", () => {
     const buildFindQuery = (resolveValue: unknown) => ({
       populate: jest.fn().mockReturnThis(),

@@ -33,9 +33,9 @@ describe("JobService", () => {
     jest.clearAllMocks();
   });
 
-  // ──────────────────────────────────────────────────────────
+  //
   // createJob
-  // ──────────────────────────────────────────────────────────
+  //
   describe("createJob", () => {
     it("should create and return a new job", async () => {
       (Job.create as jest.Mock).mockResolvedValue(mockJobData);
@@ -49,9 +49,9 @@ describe("JobService", () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────
+  //
   // getAllJobs
-  // ──────────────────────────────────────────────────────────
+  //
   describe("getAllJobs", () => {
     it("should return paginated jobs with meta", async () => {
       (Job.find as jest.Mock).mockReturnValue(mockFindQuery([mockJobData]));
@@ -177,9 +177,9 @@ describe("JobService", () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────
+  //
   // getJobById
-  // ──────────────────────────────────────────────────────────
+  //
   describe("getJobById", () => {
     it("should return the job when found", async () => {
       (Job.findById as jest.Mock).mockReturnValue({
@@ -203,9 +203,9 @@ describe("JobService", () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────
+  //
   // deleteJob
-  // ──────────────────────────────────────────────────────────
+  //
   describe("deleteJob", () => {
     it("should delete the job and all its applications", async () => {
       (Job.findById as jest.Mock).mockResolvedValue(mockJobData);
